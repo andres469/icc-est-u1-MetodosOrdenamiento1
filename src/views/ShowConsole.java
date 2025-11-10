@@ -1,5 +1,7 @@
 package views;
 
+import models.Persona;
+
 public class ShowConsole {
 
     public ShowConsole() {
@@ -55,6 +57,16 @@ public class ShowConsole {
         System.out.println(obj);
     }
 
+    public void printObject1(Persona obj,String name) {
+        System.out.println(obj);
+        System.out.println(obj !=null? "Persona encontrada: " +name+ obj : "Persona no encontrada");
+
+    }
+    public void printObject2(Persona obj,int age) {
+        System.out.println(obj);
+        System.out.println(obj !=null? "Persona encontrada: " +age+ obj : "Persona no encontrada");
+
+    }
     
     
 }

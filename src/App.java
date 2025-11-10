@@ -1,4 +1,5 @@
 import controllers.MetodosBusqueda;
+import models.Persona;
 import views.ShowConsole;
 
 public class App {
@@ -13,6 +14,20 @@ public class App {
         metodosBusqueda.busquedaLinealWhile(-2);
          metodosBusqueda.busquedaLinealWhile(20);
          
+         Persona[] personas = new Persona[] {
+                new Persona("Ana", 25),
+                new Persona("Luis", 30),
+                new Persona("Maria", 28),
+                new Persona("Carlos", 35),
+                new Persona("Sofia", 22),
+                new Persona("Jorge", 27),
+                new Persona("Lucia", 24),
+            };
 
+            Persona resultadoPer= metodosBusqueda.searchPersonByName(personas, "Juan");
+            showConsole.printObject(resultadoPer);
+
+            Persona resultadoPer1= metodosBusqueda.findPersonByAge(personas, 25);
+            showConsole.printObject1( resultadoPer1,"25");
     }
 }

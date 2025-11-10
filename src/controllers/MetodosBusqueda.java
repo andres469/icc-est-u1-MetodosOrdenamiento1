@@ -32,6 +32,109 @@ public class MetodosBusqueda {
             // si se encontró, imprimimos con el formato pedido
             showConsole.printFoundBracket(10);
         }
+
+        // Búsqueda por suma de nombres (convertir nombre a número y sumar)
+        showConsole.printSection("\nlos datos del buqueda por suma");
+        Persona[] personas2 = new Persona[] {
+            new Persona(1, "Ana"),
+            new Persona(2, "Juan"),
+            new Persona(3, "María"),
+            // Este nombre está construido para obtener suma = 498 (19 'Z' + 'D' = 494 + 4)
+            new Persona(99, "ZZZZZZZZZZZZZZZZZZZD")
+        };
+
+        // Mostrar cada nombre y su valor numérico
+        for (Persona p : personas2) {
+            int valor = nombreAValor(p.getNombre());
+            System.out.println(p.getNombre() + " -> " + valor);
+        }
+
+        // Buscar la persona cuya suma de nombre sea 498
+        // Obtener la primera coincidencia (si existe) y mostrarla
+        Persona match = buscarPorSumaReturn(personas2, 498);
+        if (match != null) {
+            showConsole.printFoundBracket(498);
+            showConsole.printObject(match);
+        } else {
+            showConsole.printError("el numero buscado no se encontro");
+        }
+    }
+
+    /**
+     * Convierte un nombre a un valor numérico sumando A=1 .. Z=26 (ignora caracteres no alfabéticos)
+     */
+    public int nombreAValor(String nombre) {
+        if (nombre == null) return 0;
+        int suma = 0;
+        for (char ch : nombre.toCharArray()) {
+            char c = Character.toUpperCase(ch);
+            if (c >= 'A' && c <= 'Z') {
+                suma += c - 'A' + 1;
+            } else if (c == 'Ñ') {
+                // tratar Ñ como N
+                suma += 'N' - 'A' + 1;
+            } else {
+                // ignorar acentos y otros símbolos; para letras acentuadas, podemos mapear manualmente
+                // por simplicidad, tratar 'Á', 'É', etc. como su base sin tilde
+                switch (c) {
+                    case '\u00C1': // Á
+                    case '\u00E1': // á
+                    case '\u00C9': // É
+                    case '\u00E9':
+                    case '\u00CD':
+                    case '\u00ED':
+                    case '\u00D3':
+                    case '\u00F3':
+                    case '\u00DA':
+                    case '\u00FA':
+                        // normalizar eliminando la tilde: aproximamos convirtiendo a su letra base
+                        char base = java.text.Normalizer.normalize(String.valueOf(c), java.text.Normalizer.Form.NFD).charAt(0);
+                        if (base >= 'A' && base <= 'Z') suma += base - 'A' + 1;
+                        break;
+                    default:
+                        // ignorar otros caracteres
+                        break;
+                }
+            }
+        }
+        return suma;
+    }
+
+    /** Busca en el arreglo las personas cuya suma de nombre == target */
+    public void buscarPorSuma(Persona[] personas, int target) {
+        boolean encontrado = false;
+        for (Persona p : personas) {
+            int s = nombreAValor(p.getNombre());
+            if (s == target) {
+                encontrado = true;
+                showConsole.printFoundBracket(s);
+                showConsole.printObject(p);
+            }
+        }
+        if (!encontrado) {
+            showConsole.printError("el numero buscado no se encontro");
+        }
+    }
+
+    /** Retorna la primera Persona cuya suma del nombre es igual a target, o null si no hay coincidencias */
+    public Persona buscarPorSumaReturn(Persona[] personas, int target) {
+        if (personas == null) return null;
+        for (Persona p : personas) {
+            if (nombreAValor(p.getNombre()) == target) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    /** Retorna todas las Personas cuya suma del nombre es igual a target */
+    public java.util.List<Persona> buscarPorSumaAll(Persona[] personas, int target) {
+        java.util.List<Persona> matches = new java.util.ArrayList<>();
+        if (personas == null) return matches;
+        for (Persona p : personas) {
+            if (nombreAValor(p.getNombre()) == target) matches.add(p);
+        }
+        return matches;
     }
 
     public int busquedaLienal(int busqueda) {
@@ -79,5 +182,42 @@ public class MetodosBusqueda {
 
         return null;
     }
+
+    public Persona searchPersonByName(Persona[] personas, String name) {
+        for (Persona persona : personas) {
+            if (persona.getNombre().equals(name)) {
+                return persona;
+            }
+        }
+        return null;
+
+    }
+
+    public Persona findPersonByAge(Persona[] personas, int age) {
+        for (Persona persona : personas) {
+            if (persona.getAge() > 25 ) {
+                if (persona.getAge()%2==0) {
+                    System.out.println("es par");
+                }else{
+                    System.out.println("es impar");
+                    return persona;
+                }
+                
+            }
+        }
+        return null;
+
+    }
+
+    public  Persona findPersonByValueName(Persona[] personas, String name) {
+        for (Persona persona : personas) {
+            if (persona.getNombre().equals(name)) {
+                return persona;
+            }
+        }
+        return null;
+
+    }
+
 
 }
