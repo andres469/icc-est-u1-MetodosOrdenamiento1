@@ -65,37 +65,12 @@ public class MetodosBusqueda {
      */
     public int nombreAValor(String nombre) {
         if (nombre == null) return 0;
+
+        // Sumar el valor numérico de cada carácter (su código Unicode/ASCII)
         int suma = 0;
-        for (char ch : nombre.toCharArray()) {
-            char c = Character.toUpperCase(ch);
-            if (c >= 'A' && c <= 'Z') {
-                suma += c - 'A' + 1;
-            } else if (c == 'Ñ') {
-                // tratar Ñ como N
-                suma += 'N' - 'A' + 1;
-            } else {
-                // ignorar acentos y otros símbolos; para letras acentuadas, podemos mapear manualmente
-                // por simplicidad, tratar 'Á', 'É', etc. como su base sin tilde
-                switch (c) {
-                    case '\u00C1': // Á
-                    case '\u00E1': // á
-                    case '\u00C9': // É
-                    case '\u00E9':
-                    case '\u00CD':
-                    case '\u00ED':
-                    case '\u00D3':
-                    case '\u00F3':
-                    case '\u00DA':
-                    case '\u00FA':
-                        // normalizar eliminando la tilde: aproximamos convirtiendo a su letra base
-                        char base = java.text.Normalizer.normalize(String.valueOf(c), java.text.Normalizer.Form.NFD).charAt(0);
-                        if (base >= 'A' && base <= 'Z') suma += base - 'A' + 1;
-                        break;
-                    default:
-                        // ignorar otros caracteres
-                        break;
-                }
-            }
+        for (int i = 0; i < nombre.length(); i++) {
+            char c = nombre.charAt(i);
+            suma += (int) c; // suma del valor de cada carácter
         }
         return suma;
     }

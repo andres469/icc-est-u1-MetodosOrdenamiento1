@@ -1,6 +1,8 @@
 import controllers.MetodosBusqueda;
 import models.Persona;
 import views.ShowConsole;
+import java.util.Scanner;
+import java.util.List;
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -29,5 +31,24 @@ public class App {
 
             Persona resultadoPer1= metodosBusqueda.findPersonByAge(personas, 25);
             showConsole.printObject1( resultadoPer1,"25");
+
+            // Pedir al usuario un número y buscar personas cuya suma del nombre sea ese número
+            Scanner sc = new Scanner(System.in);
+            System.out.print("Ingrese un numero objetivo para buscar por suma de nombres: ");
+            if (sc.hasNextInt()) {
+                int objetivo = sc.nextInt();
+                List<Persona> matches = metodosBusqueda.buscarPorSumaAll(personas, objetivo);
+                if (matches.isEmpty()) {
+                    showConsole.printError("el numero buscado no se encontro");
+                } else {
+                    for (Persona p : matches) {
+                        showConsole.printFoundBracket(objetivo);
+                        showConsole.printObject(p);
+                    }
+                }
+            } else {
+                System.out.println("Entrada no valida.");
+            }
+            sc.close();
     }
 }
